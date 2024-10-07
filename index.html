@@ -227,23 +227,21 @@
         </a>
     </div>
 
-    <!-- Include jsPDF from CDN -->
+    <!-- Include jsPDF and html2canvas from CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 
     <script>
         function downloadPDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
+            const content = document.getElementById("business-card-content");
 
-            // Get the business card content to convert to PDF
-            const content = document.getElementById('business-card-content').innerHTML;
-
-            // Add content to PDF
-            doc.text('MK Digital Business Card', 10, 10);
-            doc.fromHTML(content, 15, 15);
-
-            // Save the PDF
-            doc.save('MK_Digital_Business_Card.pdf');
+            html2canvas(content).then(function(canvas) {
+                const imgData = canvas.toDataURL('image/png');
+                doc.addImage(imgData, 'PNG', 10, 10, 180, 160); // Adjust the size and position as needed
+                doc.save('MK_Digital_Business_Card.pdf');
+            });
         }
     </script>
 </body>
